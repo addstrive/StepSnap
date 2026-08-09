@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScribeClone – Your Guide</title>
+  <style>
+    /* ── Reset & base ──────────────────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:         #0f0f13;
+      --surface:    #1a1a24;
+      --surface2:   #1e1e2e;
+      --border:     #2d2d3f;
+      --text:       #e2e8f0;
+      --muted:      #64748b;
+      --accent:     #6366f1;
+      --accent2:    #8b5cf6;
+      --success:    #22c55e;
+      --radius:     12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── Screen-only header ─────────────────────────────────────────────────── */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 32px;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 16px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .guide-meta {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .btn {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-ghost {
+      background: var(--surface2);
+      color: #94a3b8;
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--border); color: var(--text); }
+    .btn-danger {
+      background: #7f1d1d40;
+      color: #f87171;
+      border: 1px solid #7f1d1d;
+    }
+    .btn-danger:hover { background: #7f1d1d60; }
+
+    /* ── Main content ──────────────────────────────────────────────────────── */
+    .main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+
+    .guide-header {
+      margin-bottom: 40px;
+    }
+    .guide-title {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .guide-title span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .guide-subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* ── Empty state ────────────────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 80px 40px;
+      color: var(--muted);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+    .empty-state h3    { font-size: 1.2rem; color: var(--text); margin-bottom: 8px; }
+    .empty-state p     { font-size: 0.9rem; }
+
+    /* ── Step cards ─────────────────────────────────────────────────────────── */
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step-card {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0 20px;
+      position: relative;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* Connector line */
+    .step-card::before {
+      content: '';
+      position: absolute;
+      left: 27px;
+      top: 56px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .step-card:last-child::before { display: none; }
+
+    /* Step number bubble */
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .step-number.nav-type  { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+    .step-number.input-type { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+    /* Card body */
+    .step-body {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .step-content {
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .step-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-info { flex: 1; min-width: 0; }
+    .step-description {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .step-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .step-meta a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .step-meta a:hover { text-decoration: underline; }
+
+    /* Screenshot */
+    .step-screenshot {
+      border-top: 1px solid var(--border);
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+    .step-screenshot img {
+      width: 100%;
+      display: block;
+      border-radius: 0 0 var(--radius) var(--radius);
+      max-height: 400px;
+      object-fit: contain;
+      background: #000;
+    }
+    .no-screenshot {
+      padding: 14px 20px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-top: 1px dashed var(--border);
+      font-style: italic;
+    }
+
+    /* ── Edit title overlay ──────────────────────────────────────────────────── */
+    #title-input {
+      font-size: 2rem;
+      font-weight: 700;
+      background: transparent;
+      border: none;
+      border-bottom: 2px dashed var(--border);
+      color: var(--text);
+      width: 100%;
+      outline: none;
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+      font-family: inherit;
+    }
+    #title-input:focus { border-color: var(--accent); }
+
+    /* ── Print / PDF styles ─────────────────────────────────────────────────── */
+    @media print {
+      /* Hide interactive chrome */
+      .header,
+      .btn,
+      .header-actions,
+      .guide-actions,
+      #title-input { display: none !important; }
+
+      body {
+        background: #fff !important;
+        color: #1a1a1a !important;
+      }
+
+      .main {
+        padding: 20px !important;
+        max-width: 100% !important;
+      }
+
+      .guide-title-print {
+        font-size: 24pt;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+        display: block !important;
+      }
+      .guide-subtitle { color: #666 !important; }
+
+      .step-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 24px;
+      }
+      .step-card::before { background: #ccc !important; }
+
+      .step-body {
+        border: 1px solid #d1d5db !important;
+        background: #f9fafb !important;
+        box-shadow: none !important;
+        border-radius: 8px !important;
+      }
+
+      .step-number {
+        background: #4f46e5 !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .step-description { color: #111 !important; }
+      .step-meta        { color: #555 !important; }
+      .step-meta a      { color: #4f46e5 !important; }
+
+      .step-screenshot img {
+        max-height: 300px !important;
+        border: 1px solid #e5e7eb !important;
+      }
+
+      .no-screenshot { display: none !important; }
+
+      /* Keep screenshots from splitting across pages */
+      .step-screenshot {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      /* Force page break before each step if it won't fit */
+      .step-card + .step-card {
+        page-break-before: auto;
+        break-before: auto;
+      }
+    }
+
+    /* ── Utility ────────────────────────────────────────────────────────────── */
+    .guide-title-print { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Screen-only sticky header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-mark">✍</div>
+        <div>
+          ScribeClone
+          <div class="guide-meta" id="guide-meta">Loading guide…</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" id="new-recording-btn">▶ New Recording</button>
+        <button class="btn btn-danger" id="clear-btn">🗑 Clear</button>
+        <button class="btn btn-primary" id="export-pdf-btn">⬇ Export PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="guide-header">
+      <!-- Editable title (screen only) -->
+      <input type="text" id="title-input" value="Untitled Guide" maxlength="120" />
+      <!-- Print-only title -->
+      <div class="guide-title-print" id="print-title"></div>
+      <div class="guide-subtitle" id="guide-subtitle">Generated by ScribeClone</div>
+    </div>
+
+    <div class="steps-list" id="steps-list">
+      <!-- Injected by dashboard.js -->
+    </div>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
