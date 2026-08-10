@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ScribeClone – Auto Guide Recorder",
+  "name": "StepSnap – Auto Guide Recorder",
   "version": "1.0.0",
-  "description": "Record browser and desktop actions, then export a beautiful step-by-step PDF guide.",
+  "description": "Record browser actions and export beautiful step-by-step guides instantly.",
   "permissions": [
     "activeTab",
     "scripting",
@@ -21,7 +21,7 @@
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     },
-    "default_title": "ScribeClone"
+    "default_title": "StepSnap"
   },
   "content_scripts": [
     {
