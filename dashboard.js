@@ -1,5 +1,5 @@
 /**
- * dashboard.js – ScribeClone Guide Viewer
+ * dashboard.js – StepSnap Guide Viewer
  *
  * Loads captured steps from chrome.storage.local and renders them as
  * a chronological, screenshot-rich step guide.
@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  const STEPS_KEY = 'scribeclone_steps';
+  const STEPS_KEY = 'stepsnap_steps';
 
   // ─── DOM refs ──────────────────────────────────────────────────────────────
 
@@ -188,7 +188,7 @@
   newRecBtn.addEventListener('click', () => {
     // Open the extension popup programmatically isn't possible from a tab,
     // so guide the user to click the extension icon instead.
-    alert('Click the ScribeClone icon in your Chrome toolbar to start a new recording.');
+    alert('Click the StepSnap icon in your Chrome toolbar to start a new recording.');
   });
 
   // ─── Boot ─────────────────────────────────────────────────────────────────

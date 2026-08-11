@@ -76,7 +76,7 @@
 
     isActive = true;
     setStatus('Recording…', true);
-    subtitle.textContent = 'Your screen is being monitored. Switch to any app and start working. ScribeClone will capture each step automatically.';
+    subtitle.textContent = 'Your screen is being monitored. Switch to any app and start working. StepSnap will capture each step automatically.';
     startBtn.style.display = 'none';
 
     // Tell background the stream is live

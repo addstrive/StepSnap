@@ -44,14 +44,14 @@
   }
 
   async function refreshStepCount() {
-    const result = await chrome.storage.local.get('scribeclone_steps');
-    const steps = result.scribeclone_steps || [];
+    const result = await chrome.storage.local.get('stepsnap_steps');
+    const steps = result.stepsnap_steps || [];
     stepCount.textContent = steps.length;
   }
 
   async function checkForExistingGuide() {
-    const result = await chrome.storage.local.get('scribeclone_steps');
-    const steps = result.scribeclone_steps || [];
+    const result = await chrome.storage.local.get('stepsnap_steps');
+    const steps = result.stepsnap_steps || [];
     viewBtn.style.display = steps.length > 0 ? 'block' : 'none';
   }
 

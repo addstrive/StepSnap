@@ -1,5 +1,5 @@
 /**
- * content.js – ScribeClone page-level event recorder
+ * content.js – StepSnap page-level event recorder
  *
  * Injected into every page. Listens for:
  *  - click:  any user click (with meaningful element description)
@@ -13,12 +13,12 @@
   'use strict';
 
   // Guard: don't inject twice
-  if (window.__scribecloneInjected) {
-    console.log('[SC-content] already injected, skipping');
+  if (window.__stepsnapInjected) {
+    console.log('[SS-content] already injected, skipping');
     return;
   }
-  window.__scribecloneInjected = true;
-  console.log('[SC-content] injected on', window.location.href);
+  window.__stepsnapInjected = true;
+  console.log('[SS-content] injected on', window.location.href);
 
   // ─── Helpers ───────────────────────────────────────────────────────────────
 
@@ -111,7 +111,7 @@
   // Removing the getStatus pre-check eliminates a round-trip failure point.
 
   document.addEventListener('click', (e) => {
-    console.log('[SC-content] click detected, sending to background');
+    console.log('[SS-content] click detected, sending to background');
     const el  = e.target.closest('a, button, input, select, [role="button"], [role="link"], [role="option"], [role="menuitem"]') || e.target;
     const desc = describeElement(el);
     const tag  = el.tagName.toLowerCase();

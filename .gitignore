@@ -1,0 +1,10 @@
+# Chrome extension signing key — never commit this
+*.pem
+*.crx
+
+# macOS
+.DS_Store
+
+# Node (if build tools added later)
+node_modules/
+dist/

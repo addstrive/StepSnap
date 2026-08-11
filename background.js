@@ -1,5 +1,5 @@
 /**
- * background.js – ScribeClone Service Worker (MV3)
+ * background.js – StepSnap Service Worker (MV3)
  *
  * Key design choices:
  *  - isRecording is ALWAYS read from chrome.storage.local, never cached in memory.
@@ -11,8 +11,8 @@
  *    a MediaStream across service-worker restarts.
  */
 
-const STATE_KEY = 'scribeclone_state';
-const STEPS_KEY = 'scribeclone_steps';
+const STATE_KEY = 'stepsnap_state';
+const STEPS_KEY = 'stepsnap_steps';
 
 // ─── Storage helpers (source of truth — no in-memory cache) ──────────────────
 
@@ -60,9 +60,9 @@ function requestScreenshot(captureTabId) {
 async function injectContentScript(tabId) {
   try {
     await chrome.scripting.executeScript({ target: { tabId }, files: ['content.js'] });
-    console.log('[SC] Injected content.js → tab', tabId);
+    console.log('[SS] Injected content.js → tab', tabId);
   } catch (e) {
-    console.warn('[SC] Inject skipped tab', tabId, '—', e.message);
+    console.warn('[SS] Inject skipped tab', tabId, '—', e.message);
   }
 }
 
@@ -73,7 +73,7 @@ async function startRecording() {
   if (state.isRecording) return { success: false, error: 'Already recording.' };
 
   await clearSteps();
-  console.log('[SC] startRecording — opening capture tab');
+  console.log('[SS] startRecording — opening capture tab');
 
   const tab = await chrome.tabs.create({
     url: chrome.runtime.getURL('capture.html'),
@@ -81,7 +81,7 @@ async function startRecording() {
   });
 
   await setState({ isRecording: true, captureTabId: tab.id });
-  console.log('[SC] Recording started, captureTabId:', tab.id);
+  console.log('[SS] Recording started, captureTabId:', tab.id);
 
   // Inject content.js into every currently-open http/https tab so the user
   // can click on any tab without needing to reload it first.
@@ -91,7 +91,7 @@ async function startRecording() {
       .filter(t => t.id !== tab.id)
       .map(t => injectContentScript(t.id))
   );
-  console.log('[SC] Injected content.js into', allTabs.length, 'existing tabs');
+  console.log('[SS] Injected content.js into', allTabs.length, 'existing tabs');
 
   return { success: true };
 }
@@ -107,7 +107,7 @@ async function stopRecording() {
 
   await setState({ isRecording: false, captureTabId: null });
   chrome.tabs.create({ url: chrome.runtime.getURL('dashboard.html') });
-  console.log('[SC] Recording stopped');
+  console.log('[SS] Recording stopped');
   return { success: true };
 }
 
@@ -115,10 +115,10 @@ async function stopRecording() {
 
 async function handleUserAction(event) {
   const state = await getState();
-  console.log('[SC] userAction — isRecording:', state.isRecording, '| desc:', event.description);
+  console.log('[SS] userAction — isRecording:', state.isRecording, '| desc:', event.description);
 
   if (!state.isRecording) {
-    console.warn('[SC] Dropped — not recording');
+    console.warn('[SS] Dropped — not recording');
     return;
   }
 
@@ -134,7 +134,7 @@ async function handleUserAction(event) {
   };
 
   await saveStep(step);
-  console.log('[SC] Step saved ✓  total:', (await getSteps()).length);
+  console.log('[SS] Step saved ✓  total:', (await getSteps()).length);
 }
 
 // ─── Message router ───────────────────────────────────────────────────────────
@@ -165,12 +165,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
 
       case 'captureReady':
-        console.log('[SC] Capture tab ready — stream active');
+        console.log('[SS] Capture tab ready — stream active');
         sendResponse({ ok: true });
         break;
 
       case 'streamEnded':
-        console.log('[SC] Stream ended by user');
+        console.log('[SS] Stream ended by user');
         await stopRecording();
         sendResponse({ ok: true });
         break;
@@ -215,7 +215,7 @@ chrome.tabs.onActivated.addListener(async ({ tabId }) => {
 chrome.tabs.onRemoved.addListener(async (tabId) => {
   const state = await getState();
   if (tabId === state.captureTabId && state.isRecording) {
-    console.log('[SC] Capture tab closed — stopping recording');
+    console.log('[SS] Capture tab closed — stopping recording');
     await setState({ isRecording: false, captureTabId: null });
     chrome.tabs.create({ url: chrome.runtime.getURL('dashboard.html') });
   }
