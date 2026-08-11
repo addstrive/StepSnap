@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StepSnap – Privacy Policy</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 720px;
+      margin: 60px auto;
+      padding: 0 24px 80px;
+      line-height: 1.7;
+    }
+    h1 { font-size: 2rem; margin-bottom: 8px; }
+    .updated { color: #666; font-size: 0.9rem; margin-bottom: 48px; }
+    h2 { font-size: 1.15rem; margin: 36px 0 10px; color: #111; }
+    p { margin-bottom: 12px; color: #333; }
+    ul { margin: 8px 0 12px 20px; color: #333; }
+    li { margin-bottom: 6px; }
+    a { color: #0066cc; }
+    .highlight {
+      background: #f0f7ff;
+      border-left: 4px solid #0066cc;
+      padding: 14px 18px;
+      border-radius: 4px;
+      margin: 24px 0;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>StepSnap Privacy Policy</h1>
+  <p class="updated">Last updated: August 11, 2026</p>
+
+  <div class="highlight">
+    StepSnap processes everything locally in your browser. No data is ever sent to any server, third party, or external service.
+  </div>
+
+  <h2>What StepSnap Records</h2>
+  <p>When you start a recording session, StepSnap captures the following on your device only:</p>
+  <ul>
+    <li>Screenshots of your screen (taken after each interaction)</li>
+    <li>Descriptions of your actions (e.g., "Clicked button: Submit", "Typed in Search field")</li>
+    <li>Page titles and URLs of the pages you visit during recording</li>
+    <li>Text you type into form fields (excluding password fields, which are never recorded)</li>
+  </ul>
+
+  <h2>Where Data Is Stored</h2>
+  <p>All recorded data is stored exclusively in <code>chrome.storage.local</code> — a sandboxed storage area on your own device managed by Chrome. This data is:</p>
+  <ul>
+    <li>Never transmitted to any server or external destination</li>
+    <li>Never shared with third parties</li>
+    <li>Automatically cleared when you start a new recording session</li>
+    <li>Accessible only to the StepSnap extension itself</li>
+  </ul>
+
+  <h2>Permissions Explained</h2>
+  <p>StepSnap requests the following Chrome permissions:</p>
+  <ul>
+    <li><strong>activeTab / tabs / scripting / host_permissions (&lt;all_urls&gt;)</strong> — Required to inject the action-capture script into whichever browser tabs are open when you start recording. Without this, the extension could only record the single tab that was active when you clicked Start.</li>
+    <li><strong>desktopCapture</strong> — Required to take screenshots of your screen after each recorded action. Screenshots are encoded locally and stored only in chrome.storage.local.</li>
+    <li><strong>storage</strong> — Required to save your recorded steps and extension state between the recording session and guide viewer.</li>
+  </ul>
+
+  <h2>Password Fields</h2>
+  <p>StepSnap explicitly skips password fields. When a password input is detected, the extension records only the field label (e.g., "Typed in password field: Password") — never the value entered.</p>
+
+  <h2>Data Retention</h2>
+  <p>Recorded steps persist in <code>chrome.storage.local</code> until you start a new recording or uninstall the extension. Uninstalling StepSnap removes all locally stored data.</p>
+
+  <h2>Children's Privacy</h2>
+  <p>StepSnap is not directed at children under 13. No personal information is collected from any user.</p>
+
+  <h2>Changes to This Policy</h2>
+  <p>If this policy is updated, the "Last updated" date above will change. Material changes will also be noted in the Chrome Web Store listing.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this privacy policy? Email <a href="mailto:dotcomcrowd@gmail.com">dotcomcrowd@gmail.com</a>.</p>
+
+</body>
+</html>
