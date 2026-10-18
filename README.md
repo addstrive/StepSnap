@@ -1,58 +1,75 @@
-# StepSnap – Auto Guide Recorder
+# StepSnap: Auto Guide Recorder
 
-A free, open-source Chrome Extension (Manifest V3) that automatically records your browser actions and compiles them into a printable PDF step-by-step guide — like Scribe / ScribeHow, but 100% local and free.
+A free, open-source Chrome extension that turns any browser task into a clean, numbered, screenshot-by-screenshot job aid you can export to PDF. No design tool required.
 
-## Features
+## Privacy and security at a glance
 
-- 🎥 Records clicks, typing, and navigation across any website
-- 📸 Takes a screenshot after every action
-- 📋 Renders a numbered step-by-step guide with screenshots
-- 🖨️ One-click PDF export via browser print
-- 🔒 100% local — no data leaves your machine
+For anyone reviewing this before installing it at work:
 
-## Installation (Developer Mode)
+- **No network access of any kind.** The code makes no outbound requests: no analytics, no telemetry, no cloud service, no account.
+- **Storage is local only.** Recorded steps and screenshots live in `chrome.storage.local` on your machine. Starting a new recording clears the previous one; uninstalling the extension removes everything.
+- **Passwords are never recorded.** In a password field, StepSnap notes only the field's label, never the value.
+- **What it does capture while recording:** a screenshot after each action, a short description of each click, the first 60 characters of text typed into non-password fields, and the page title and URL.
+- **Screenshots show only what you choose to share.** Recording starts with Chrome's standard screen-share prompt. Share a single window rather than your whole screen if other apps might show sensitive information.
+- **Fully open source (MIT).** Every line is in this repo, about 900 lines of plain JavaScript with no external libraries, so it can be audited in under an hour.
 
-1. Clone or download this repo
-2. Open Chrome and go to `chrome://extensions`
-3. Enable **Developer mode** (top-right toggle)
-4. Click **Load unpacked** and select the `StepSnap` folder
-5. The StepSnap icon will appear in your toolbar
+### Permissions, in plain terms
 
-## How to Use
+| Permission | Why it's needed |
+| --- | --- |
+| `activeTab`, `tabs`, `scripting`, host access to all sites | To notice clicks and typing in whichever tab you are working in during a recording |
+| `desktopCapture` | To take the screenshot after each step, from the screen or window you choose to share |
+| `storage` | To keep your recorded steps on your machine between recording and viewing the guide |
 
-1. Click the **StepSnap** icon in Chrome
-2. Click **Start Recording**
-3. In the capture tab that opens, click **Share My Screen** and select your monitor
-4. Switch to any website and start working — every click and input is captured
-5. When done, click the StepSnap icon → **Stop Recording**
-6. Your guide opens automatically with all steps and screenshots
-7. Click **Export PDF** to print or save as PDF
+A note for reviewers: the page script loads on every site so it is ready when you press record. When you are not recording, the events it sees are passed to the extension's background worker and discarded there; nothing is stored and nothing leaves the browser.
 
-## Project Structure
+## Why I built this
+
+Most of what people know how to do at work, they've never written down. Not because they're bad at documentation, but because writing an SOP is tedious, and the person who knows the process best is usually the one too busy doing it to stop and explain it.
+
+I built StepSnap to remove that excuse. Click record, do the task in your browser like normal, and it captures every click, keystroke and page change with a screenshot after each action. Stop recording, and you have a print-ready job aid.
+
+## Install (developer mode)
+
+1. Download this repo (green **Code** button, then **Download ZIP**) and unzip it.
+2. Open Chrome and go to `chrome://extensions`.
+3. Turn on **Developer mode** (top-right toggle).
+4. Click **Load unpacked** and select the unzipped folder.
+5. The StepSnap icon appears in your toolbar.
+
+If your company's Chrome is managed, developer mode may be blocked. Check with IT before rolling it out to a team.
+
+## How to use it
+
+1. Click the **StepSnap** icon in Chrome.
+2. Click **Start Recording**.
+3. In the capture tab that opens, click **Share My Screen** and pick the window you'll work in.
+4. Switch to that window and do the task as you normally would.
+5. When you're done, click the StepSnap icon, then **Stop Recording**.
+6. Your guide opens with every step and screenshot.
+7. Click **Export PDF** to print it or save it as a PDF.
+
+## Project structure
 
 ```
 StepSnap/
-├── manifest.json      # Chrome Extension MV3 manifest
-├── background.js      # Service worker — state, screenshot requests, step storage
-├── content.js         # Injected into pages — captures clicks and inputs
-├── capture.html/.js   # Dedicated tab for getDisplayMedia screen capture
-├── popup.html/.js     # Extension popup UI (Start / Stop / View)
-├── dashboard.html/.js # Step guide viewer + PDF export
-└── icons/             # Extension icons (16px, 48px, 128px)
+├── manifest.json      # Chrome extension manifest (Manifest V3)
+├── background.js      # Service worker: recording state, screenshots, step storage
+├── content.js         # Page script: notices clicks and typing
+├── capture.html/.js   # Tab that holds the screen-share stream for screenshots
+├── popup.html/.js     # Toolbar popup (Start, Stop, View)
+├── dashboard.html/.js # Guide viewer and PDF export
+├── docs/privacy.html  # Privacy policy
+└── icons/             # Extension icons
 ```
 
-## Tech Notes
+## Tech notes
 
-- **Manifest V3** service worker with all state persisted to `chrome.storage.local` (survives SW idle restarts)
-- `getDisplayMedia` runs in a dedicated tab (MV3 service workers can't call MediaDevices)
-- Screenshots are canvas snapshots of the display stream, encoded as JPEG
-- PDF export uses `@media print` CSS + `window.print()` — no external libraries
-- `host_permissions: ["<all_urls>"]` allows injection into any open tab when recording starts
-
-## Privacy
-
-StepSnap processes everything locally in your browser. No data is sent to any server. Recorded steps and screenshots are stored only in `chrome.storage.local` and cleared when you start a new recording.
+- Manifest V3 service worker; all state is kept in `chrome.storage.local` so it survives the worker going idle.
+- Screen capture runs in its own tab, because Manifest V3 service workers can't use the screen-capture API directly.
+- Screenshots are canvas snapshots of the shared stream, saved as JPEG.
+- PDF export uses print CSS and the browser's own print dialog. No external libraries.
 
 ## License
 
-MIT
+MIT. Use it as is, change it, share it.
