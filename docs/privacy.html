@@ -35,7 +35,7 @@
 <body>
 
   <h1>StepSnap Privacy Policy</h1>
-  <p class="updated">Last updated: August 11, 2026</p>
+  <p class="updated">Last updated: October 17, 2026</p>
 
   <div class="highlight">
     StepSnap processes everything locally in your browser. No data is ever sent to any server, third party, or external service.
@@ -47,11 +47,11 @@
     <li>Screenshots of your screen (taken after each interaction)</li>
     <li>Descriptions of your actions (e.g., "Clicked button: Submit", "Typed in Search field")</li>
     <li>Page titles and URLs of the pages you visit during recording</li>
-    <li>Text you type into form fields (excluding password fields, which are never recorded)</li>
+    <li>The first 60 characters of text you type into form fields (password fields are never recorded)</li>
   </ul>
 
   <h2>Where Data Is Stored</h2>
-  <p>All recorded data is stored exclusively in <code>chrome.storage.local</code> — a sandboxed storage area on your own device managed by Chrome. This data is:</p>
+  <p>All recorded data is stored exclusively in <code>chrome.storage.local</code>, a sandboxed storage area on your own device managed by Chrome. This data is:</p>
   <ul>
     <li>Never transmitted to any server or external destination</li>
     <li>Never shared with third parties</li>
@@ -62,13 +62,13 @@
   <h2>Permissions Explained</h2>
   <p>StepSnap requests the following Chrome permissions:</p>
   <ul>
-    <li><strong>activeTab / tabs / scripting / host_permissions (&lt;all_urls&gt;)</strong> — Required to inject the action-capture script into whichever browser tabs are open when you start recording. Without this, the extension could only record the single tab that was active when you clicked Start.</li>
-    <li><strong>desktopCapture</strong> — Required to take screenshots of your screen after each recorded action. Screenshots are encoded locally and stored only in chrome.storage.local.</li>
-    <li><strong>storage</strong> — Required to save your recorded steps and extension state between the recording session and guide viewer.</li>
+    <li><strong>activeTab / tabs / scripting / host_permissions (&lt;all_urls&gt;)</strong>: Required to inject the action-capture script into whichever browser tabs are open when you start recording. Without this, the extension could only record the single tab that was active when you clicked Start. The page script is present on every site so it is ready when you press record; when you are not recording, the events it sees are discarded and nothing is stored.</li>
+    <li><strong>desktopCapture</strong>: Required to take a screenshot after each recorded action, from the screen or window you choose to share in Chrome's screen-share prompt. Screenshots are encoded locally and stored only in chrome.storage.local.</li>
+    <li><strong>storage</strong>: Required to save your recorded steps and extension state between the recording session and guide viewer.</li>
   </ul>
 
   <h2>Password Fields</h2>
-  <p>StepSnap explicitly skips password fields. When a password input is detected, the extension records only the field label (e.g., "Typed in password field: Password") — never the value entered.</p>
+  <p>StepSnap explicitly skips password fields. When a password input is detected, the extension records only the field label (e.g., "Typed in password field: Password"), never the value entered.</p>
 
   <h2>Data Retention</h2>
   <p>Recorded steps persist in <code>chrome.storage.local</code> until you start a new recording or uninstall the extension. Uninstalling StepSnap removes all locally stored data.</p>
@@ -80,7 +80,7 @@
   <p>If this policy is updated, the "Last updated" date above will change. Material changes will also be noted in the Chrome Web Store listing.</p>
 
   <h2>Contact</h2>
-  <p>Questions about this privacy policy? Email <a href="mailto:dotcomcrowd@gmail.com">dotcomcrowd@gmail.com</a>.</p>
+  <p>Questions about this privacy policy? Email <a href="mailto:max@addstrive.com">max@addstrive.com</a>.</p>
 
 </body>
 </html>
