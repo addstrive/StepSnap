@@ -47,7 +47,7 @@
     <li>Screenshots of your screen (taken after each interaction)</li>
     <li>Descriptions of your actions (e.g., "Clicked button: Submit", "Typed in Search field")</li>
     <li>Page titles and URLs of the pages you visit during recording</li>
-    <li>The first 60 characters of text you type into form fields (password fields are never recorded)</li>
+    <li>The first 60 characters of text you type into form fields (password fields are never recorded). Turn on "Leave typed text out of guides" in the popup to record only the field name.</li>
   </ul>
 
   <h2>Where Data Is Stored</h2>
@@ -62,7 +62,7 @@
   <h2>Permissions Explained</h2>
   <p>StepSnap requests the following Chrome permissions:</p>
   <ul>
-    <li><strong>activeTab / tabs / scripting / host_permissions (&lt;all_urls&gt;)</strong>: Required to inject the action-capture script into whichever browser tabs are open when you start recording. Without this, the extension could only record the single tab that was active when you clicked Start. The page script is present on every site so it is ready when you press record; when you are not recording, the events it sees are discarded and nothing is stored.</li>
+    <li><strong>activeTab / tabs / scripting / host_permissions (&lt;all_urls&gt;)</strong>: Required to inject the action-capture script into whichever browser tabs are open when you start recording. Without this, the extension could only record the single tab that was active when you clicked Start. The page script is present on every site so it is ready when you press record; when you are not recording, it ignores clicks and typing entirely and nothing is stored.</li>
     <li><strong>desktopCapture</strong>: Required to take a screenshot after each recorded action, from the screen or window you choose to share in Chrome's screen-share prompt. Screenshots are encoded locally and stored only in chrome.storage.local.</li>
     <li><strong>storage</strong>: Required to save your recorded steps and extension state between the recording session and guide viewer.</li>
   </ul>
