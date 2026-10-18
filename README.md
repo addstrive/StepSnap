@@ -9,7 +9,7 @@ For anyone reviewing this before installing it at work:
 - **No network access of any kind.** The code makes no outbound requests: no analytics, no telemetry, no cloud service, no account.
 - **Storage is local only.** Recorded steps and screenshots live in `chrome.storage.local` on your machine. Starting a new recording clears the previous one; uninstalling the extension removes everything.
 - **Passwords are never recorded.** In a password field, StepSnap notes only the field's label, never the value.
-- **What it does capture while recording:** a screenshot after each action, a short description of each click, the first 60 characters of text typed into non-password fields, and the page title and URL.
+- **What it does capture while recording:** a screenshot after each action, a short description of each click, the first 60 characters of text typed into non-password fields, and the page title and URL. Tick **Leave typed text out of guides** in the popup to record only the field name, never what was typed.
 - **Screenshots show only what you choose to share.** Recording starts with Chrome's standard screen-share prompt. Share a single window rather than your whole screen if other apps might show sensitive information.
 - **Fully open source (MIT).** Every line is in this repo, about 900 lines of plain JavaScript with no external libraries, so it can be audited in under an hour.
 
@@ -21,7 +21,7 @@ For anyone reviewing this before installing it at work:
 | `desktopCapture` | To take the screenshot after each step, from the screen or window you choose to share |
 | `storage` | To keep your recorded steps on your machine between recording and viewing the guide |
 
-A note for reviewers: the page script loads on every site so it is ready when you press record. When you are not recording, the events it sees are passed to the extension's background worker and discarded there; nothing is stored and nothing leaves the browser.
+A note for reviewers: the page script loads on every site so it is ready when you press record. When you are not recording, it ignores clicks and typing entirely: nothing is passed to the rest of the extension, nothing is stored, and nothing leaves the browser.
 
 ## Why I built this
 

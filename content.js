@@ -18,7 +18,32 @@
     return;
   }
   window.__stepsnapInjected = true;
-  console.log('[SS-content] injected on', window.location.href);
+
+  // ─── Recording gate ────────────────────────────────────────────────────────
+  // Nothing is passed to the extension unless a recording is running.
+  // The flag mirrors chrome.storage.local, so it stays correct across tabs.
+
+  const STATE_KEY = 'stepsnap_state';
+  const PREFS_KEY = 'stepsnap_prefs';
+  let recording  = false;
+  let hideTyping = false;
+
+  chrome.storage.local.get([STATE_KEY, PREFS_KEY], (r) => {
+    recording  = !!(r[STATE_KEY] && r[STATE_KEY].isRecording);
+    hideTyping = !!(r[PREFS_KEY] && r[PREFS_KEY].hideTyping);
+  });
+
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== 'local') return;
+    if (changes[STATE_KEY]) {
+      const v = changes[STATE_KEY].newValue;
+      recording = !!(v && v.isRecording);
+    }
+    if (changes[PREFS_KEY]) {
+      const v = changes[PREFS_KEY].newValue;
+      hideTyping = !!(v && v.hideTyping);
+    }
+  });
 
   // ─── Helpers ───────────────────────────────────────────────────────────────
 
@@ -80,6 +105,7 @@
 
   /** Send an action to the background service worker */
   function sendAction(type, description, extra = {}) {
+    if (!recording) return; // not recording: the event never leaves the page
     // Use callback form (not Promise) — avoids "message port closed" errors
     // that silently drop messages when the SW is waking from idle.
     chrome.runtime.sendMessage(
@@ -107,11 +133,9 @@
   }
 
   // ─── Click handler ─────────────────────────────────────────────────────────
-  // Send events unconditionally — background.js ignores them when not recording.
-  // Removing the getStatus pre-check eliminates a round-trip failure point.
+  // sendAction() drops events unless a recording is running (see Recording gate).
 
   document.addEventListener('click', (e) => {
-    console.log('[SS-content] click detected, sending to background');
     const el  = e.target.closest('a, button, input, select, [role="button"], [role="link"], [role="option"], [role="menuitem"]') || e.target;
     const desc = describeElement(el);
     const tag  = el.tagName.toLowerCase();
@@ -150,8 +174,12 @@
       if (type === 'password') {
         description = `Typed in password field: "${label}"`;
       } else {
-        const val = (el.value || '').trim().slice(0, 60);
-        description = `Typed "${val}" in "${label}"`;
+        if (hideTyping) {
+          description = `Typed in "${label}"`;
+        } else {
+          const val = (el.value || '').trim().slice(0, 60);
+          description = `Typed "${val}" in "${label}"`;
+        }
       }
     } else {
       description = `Changed "${label}"`;

@@ -14,6 +14,16 @@
   const stepCount   = document.getElementById('step-count');
   const errorMsg    = document.getElementById('error-msg');
   const tipText     = document.getElementById('tip-text');
+  const hideTyping  = document.getElementById('hide-typing');
+
+  // --- Privacy preference: leave typed text out of guides --------------------
+
+  chrome.storage.local.get('stepsnap_prefs', (r) => {
+    hideTyping.checked = !!(r.stepsnap_prefs && r.stepsnap_prefs.hideTyping);
+  });
+  hideTyping.addEventListener('change', () => {
+    chrome.storage.local.set({ stepsnap_prefs: { hideTyping: hideTyping.checked } });
+  });
 
   // --- Helpers ---------------------------------------------------------------
 
